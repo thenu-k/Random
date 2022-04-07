@@ -1,0 +1,141 @@
+<div class="featured outer container">
+    <div class="featured inner container">
+        <div class="title outer featured center">
+            <h2 class="title">Featured</h2>
+        </div>
+        <button class="featured carousel actions next">></button>
+        <button class="featured carousel actions prev remove"><</button>
+        <div class="featured carousel outer">
+            <div class="featured carousel inner">
+                <div class="featured carousel element wrap" style="background-color: green">
+                </div>
+                <div class="featured carousel element wrap">
+                </div>
+                <div class="featured carousel element wrap">
+                </div>
+                <div class="featured carousel element wrap">
+                </div>
+                <div class="featured carousel element wrap">
+                </div>
+                <div class="featured carousel element wrap">
+                </div>
+                <div class="featured carousel element wrap">
+                </div>
+                <div class="featured carousel element wrap" style="background-color: green">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .featured.outer.container{ margin: 50px 0; width: 100%;}
+    .featured.inner.container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .featured.title{
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .featured.title h2{ font-size: 30px}
+</style>
+
+<style>
+    .featured.carousel.outer{
+        min-height: 200px;
+        width: 90%;
+        overflow-x: hidden;
+    }
+    .featured.carousel.inner{
+        display: flex;
+        margin: 0 25px;
+        transform: translateX(0);
+        transition: transform 0.5s  ease-out;
+        width: min-content;
+    }
+    .featured.carousel.element.wrap{
+        margin: 0 25px;
+        height: 300px;
+        width: 200px;
+        background-color: black;
+        flex-shrink: 0;
+        flex-grow: 1;
+    }
+</style>
+
+<style>
+    .featured.actions.next{
+        position: absolute;
+        right: 0;
+        z-index: 99;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .featured.actions.prev{
+        position: absolute;
+        left: 0;
+        z-index: 99;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .actions.carousel:hover{
+        background-color: rgb(206, 206, 206)
+    }
+    .actions.carousel{ 
+        display: block;
+        cursor: pointer;
+        height: 50px;
+        width: 50px;
+        outline: none;
+        border: none;
+        margin:10px;
+        background-color: #eee;
+    }
+    .actions.carousel.remove{
+        display: none;
+    }
+</style>
+
+<script defer>
+    var num_featured = 6
+    var carousel_element_featured = document.querySelector('.featured.carousel.element.wrap')
+    const margins = 25*2
+    complete_width =  carousel_element_featured.offsetWidth +margins *2
+    var clicked = false;
+    const prev_button_featured = document.querySelector('.actions.carousel.prev')
+    const next_button_featured = document.querySelector('.actions.carousel.next')
+    const carousel_featured = document.querySelector('.featured.carousel.inner')
+    const carousel_featured_container = document.querySelector('.featured.carousel.outer')
+    prev_button_featured.addEventListener('click',() =>{ carousel_prev_featured(); clicked = true;})
+    next_button_featured.addEventListener('click', () => {carousel_next_featured(); clicked = true})
+    var translate_value  = 0
+    var max_limit = 0;
+    function carousel_next_featured(){
+        var one_translation = carousel_featured_container.offsetWidth*0.5   //because this value can change on screen resizing
+        translate_value += one_translation
+        if(prev_button_featured.classList.contains('remove')===true){
+            prev_button_featured.classList.remove('remove')
+        }
+        if(carousel_featured.offsetWidth - translate_value < carousel_featured_container.offsetWidth){
+            next_button_featured.classList.toggle('remove')
+            translate_value = carousel_featured.offsetWidth- carousel_featured_container.offsetWidth  //the magic happens here
+        }
+        carousel_featured.style.transform = 'translateX(-'+translate_value+'px)'
+    }
+    function carousel_prev_featured(){
+        var one_translation = carousel_featured_container.offsetWidth*0.5
+        translate_value -= one_translation
+        if(next_button_featured.classList.contains('remove')===true){
+            next_button_featured.classList.remove('remove')
+        }
+        if(translate_value<= 0){
+           prev_button_featured.classList.toggle('remove')
+           translate_value = 0
+        }
+        carousel_featured.style.transform = 'translateX(-'+translate_value+'px)'  // minus minus becomes positive
+    }
+</script>
